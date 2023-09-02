@@ -1,6 +1,7 @@
 package com.example.weathertelegrambot;
 
 import com.example.weathertelegrambot.bot.TelegramBot;
+import com.example.weathertelegrambot.bot.services.UserLocationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -15,9 +16,13 @@ public class WeatherTelegramBotApplication {
 
     public static void main(String[] args) throws TelegramApiException {
         var context = SpringApplication.run(WeatherTelegramBotApplication.class, args);
+        log.info("Spring application started.");
+
         var telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(context.getBean(TelegramBot.class));
-        log.debug("TelegramBot has been registered.");
+        log.info("Telegram bot has been registered.");
+
+        System.out.println(context.getBean(UserLocationService.class).findUserLocationById(1L));
     }
 }
 
