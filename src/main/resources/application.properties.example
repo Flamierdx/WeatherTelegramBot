@@ -4,3 +4,8 @@ spring.jpa.database=your_db_name
 spring.datasource.username=your_db_username
 spring.datasource.password=your_db_password
 spring.datasource.url=your_db_connection_url
+
+//rapid api properties
+rapid.api.host=your_rapid_api_host
+rapid.api.key=your_rapid_key_host
+weather.api.url=your_weather_api_url

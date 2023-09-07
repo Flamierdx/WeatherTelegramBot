@@ -1,8 +1,9 @@
 package com.example.weathertelegrambot.bot.services.impl;
 
+import com.example.weathertelegrambot.bot.exceptions.ApiException;
 import com.example.weathertelegrambot.bot.models.Weather;
 import com.example.weathertelegrambot.bot.services.WeatherService;
-import com.google.gson.JsonElement;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.okhttp.OkHttpClient;
@@ -13,9 +14,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 @Service
 @Log4j2
@@ -37,15 +38,14 @@ public class WeatherServiceImpl implements WeatherService {
 
 
     @Override
-    public Weather getWeather(double latitude, double longitude) {
+    public Weather getWeather(double latitude, double longitude) throws ApiException {
         try {
             String rawJson = sendRequestToApi(latitude, longitude);
             return parseJsonFromApi(rawJson);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new ApiException("Something went wrong. Please try again.", e);
         }
-
     }
 
     @Override
@@ -55,10 +55,8 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     private String sendRequestToApi(double latitude, double longitude) throws IOException {
-        String locationInStringFormat = latitude + "," + longitude;
-        String formattedUrl = String.format(weatherApiUrl + "?q=%s", locationInStringFormat);
         Request request = new Request.Builder()
-                .url(formattedUrl)
+                .url(createApiUrl(latitude, longitude))
                 .addHeader("X-RapidAPI-Key", this.apiKey)
                 .addHeader("X-RapidAPI-Host", this.apiHost)
                 .build();
@@ -66,6 +64,11 @@ public class WeatherServiceImpl implements WeatherService {
         try (ResponseBody responseBody = resp.body()) {
             return responseBody.string();
         }
+    }
+
+    private String createApiUrl(double latitude, double longitude) {
+        String locationInStringFormat = latitude + "," + longitude;
+        return String.format(weatherApiUrl + "?q=%s", locationInStringFormat);
     }
 
     private Weather parseJsonFromApi(String json) {

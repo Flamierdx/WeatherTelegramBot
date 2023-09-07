@@ -9,9 +9,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Weather {
     private String locationName;
+
     private String locationRegion;
+
     private String locationCountry;
+
     private double temperature;
+
     private String conditionText;
+
     private String conditionIcon;
 }

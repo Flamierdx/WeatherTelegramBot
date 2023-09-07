@@ -8,6 +8,7 @@ import lombok.Value;
 import java.io.Serial;
 import java.io.Serializable;
 
+
 @EqualsAndHashCode
 @Value
 public class SetUserDto implements Serializable {

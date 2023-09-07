@@ -11,5 +11,5 @@ public interface UserService {
 
     UserEntity findUserByIdOrThrow(Long id);
 
-    UserEntity setUserById(Long id, SetUserDto userLocationDto);
+    void setUserById(Long id, SetUserDto userLocationDto);
 }

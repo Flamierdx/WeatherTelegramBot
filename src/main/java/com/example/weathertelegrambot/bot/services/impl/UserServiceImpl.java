@@ -3,13 +3,14 @@ package com.example.weathertelegrambot.bot.services.impl;
 import com.example.weathertelegrambot.bot.dao.UserDao;
 import com.example.weathertelegrambot.bot.dto.SetUserDto;
 import com.example.weathertelegrambot.bot.models.UserEntity;
-import com.example.weathertelegrambot.bot.models.UserState;
 import com.example.weathertelegrambot.bot.services.UserService;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 
 @AllArgsConstructor
 @Service
@@ -32,9 +33,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserEntity setUserById(Long id, SetUserDto dto) {
+    public void setUserById(Long id, SetUserDto dto) {
         var optionalUserLocation = this.userDao.findById(id);
-        return optionalUserLocation
+        optionalUserLocation
                 .map(userEntity -> this.updateUserByUserLocation(userEntity, dto))
                 .orElseGet(() -> this.createNewUserById(id, dto));
     }
